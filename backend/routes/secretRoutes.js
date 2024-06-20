@@ -30,15 +30,12 @@ router.get('/secret/:hash', async (req, res) => {
     );
     const readableText = bytes.toString(CryptoJS.enc.Utf8);
     secret.secretText = readableText;
-
-    console.log(secret);
     if (secret) {
       secret.remainingViews -= 1;
       const lessViewSecret = await Secret.updateOne(
         { hash: req.params.hash },
         { remainingViews: secret.remainingViews }
       );
-      console.log(secret);
       if (
         (new Date() < new Date(secret.expiresAt) ||
           secret.expiresAt == 'never') &&
